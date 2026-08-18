@@ -1,0 +1,17 @@
+# backend/Dockerfile
+FROM maven:3.9.6-eclipse-temurin-21-alpine as build
+WORKDIR /app
+
+# 1. Copy only pom.xml to cache dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# 2. Copy source code and build (this layer only rebuilds if src changes)
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
