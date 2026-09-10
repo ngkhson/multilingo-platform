@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   postgres_db:
-    image: postgres:16
+    image: postgres:16-alpine
+    # image: postgres:16
     ports:
       - "5433:5432"
     environment:
@@ -16,7 +17,8 @@ services:
     restart: "no"
 
   redis_cache:
-    image: redis:alpine
+    image: redis:7-alpine
+    # image: redis:7
     ports:
       - "6379:6379"
     restart: "no"
