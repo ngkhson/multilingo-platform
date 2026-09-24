@@ -27,6 +27,7 @@ interface ExamPart {
   part_title: string;
   instruction: string;
   shared_audio?: { url: string; duration_seconds?: number };
+  shared_content_html?: string;
   question_groups: QuestionGroup[];
 }
 
@@ -377,6 +378,14 @@ const ExamBuilder = ({ onSave, onCancel }: { onSave: (json: string) => void, onC
                       </div>
                     )}
                   </div>
+
+                  {/* CHỈ HIỆN BÀI ĐỌC CHUNG NẾU LÀ IELTS READING PASSAGE HOẶC VSTEP ĐỌC */}
+                  {(part.part_title.toLowerCase().includes('passage') || (examType === 'VSTEP' && part.part_title.toLowerCase().includes('đọc'))) && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}><AlignLeft size={14} color="var(--primary)" /> Nội dung Bài Đọc (Shared Reading Passage)</label>
+                      <textarea className="input-field" rows={6} value={part.shared_content_html || ''} onChange={e => updatePart(pIndex, 'shared_content_html', e.target.value)} placeholder="<p>Nhập mã HTML của toàn bộ bài đọc IELTS/VSTEP tại đây...</p>"></textarea>
+                    </div>
+                  )}
 
                   {/* Question Groups */}
                   {part.question_groups.map((group, gIndex) => {
